@@ -1,61 +1,72 @@
 import { useState } from "react";
 
-function StudentLogin({ setPage, setStudent }) {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+function SignIn({ setPage, setStudent }) {
+  const [studentData, setStudentData] = useState({
+    name: "",
+    email: "",
+    rollNo: "",
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setStudentData({
+      ...studentData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+ const handleSubmit = (e) => {
+  e.preventDefault();
 
-    if (
-      formData.username === "student" &&
-      formData.password === "12345"
-    ) {
-      setStudent(formData.username);
-      setPage("exam");
-    } else {
-      alert("Invalid Username or Password");
-    }
-  };
+  localStorage.setItem("student", JSON.stringify(studentData));
+  setStudent(studentData);
+
+  alert("Sign In successful. Now please Login.");
+  setPage("home");
+};
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1>Student Login</h1>
+    <div className="signin-page">
+      <div className="signin-box">
+        <h1>Student Sign In</h1>
+        <p>Enter your details to start exam</p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            name="username"
-            placeholder="Enter Username"
-            value={formData.username}
+            name="name"
+            placeholder="Student Name"
+            value={studentData.name}
             onChange={handleChange}
+            required
           />
 
           <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            value={formData.password}
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={studentData.email}
             onChange={handleChange}
+            required
           />
 
-          <button type="submit">
-            Login
-          </button>
+          <input
+            type="text"
+            name="rollNo"
+            placeholder="Roll Number"
+            value={studentData.rollNo}
+            onChange={handleChange}
+            required
+          />
+
+          <button type="submit">Sign In</button>
         </form>
+
+        <button className="back-btn" onClick={() => setPage("home")}>
+          Back Home
+        </button>
       </div>
     </div>
   );
 }
 
-export default StudentLogin;
+export default SignIn;
