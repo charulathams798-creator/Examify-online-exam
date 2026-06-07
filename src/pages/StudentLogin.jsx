@@ -1,44 +1,61 @@
 import { useState } from "react";
 
-function Login({ setPage, setStudent }) {
-  const [rollNo, setRollNo] = useState("");
+function StudentLogin({ setPage, setStudent }) {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    const savedStudent = JSON.parse(localStorage.getItem("student"));
-
-    if (savedStudent && savedStudent.rollNo === rollNo) {
-      setStudent(savedStudent);
+    if (
+      formData.username === "student" &&
+      formData.password === "12345"
+    ) {
+      setStudent(formData.username);
       setPage("exam");
     } else {
-      alert("Student not found. Please Sign In first.");
+      alert("Invalid Username or Password");
     }
   };
 
   return (
-    <div className="signin-page">
-      <div className="signin-box">
+    <div className="login-container">
+      <div className="login-box">
         <h1>Student Login</h1>
 
         <form onSubmit={handleLogin}>
           <input
             type="text"
-            placeholder="Enter Roll Number"
-            value={rollNo}
-            onChange={(e) => setRollNo(e.target.value)}
-            required
+            name="username"
+            placeholder="Enter Username"
+            value={formData.username}
+            onChange={handleChange}
           />
 
-          <button type="submit">Login</button>
-        </form>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
 
-        <button className="back-btn" onClick={() => setPage("home")}>
-          Back Home
-        </button>
+          <button type="submit">
+            Login
+          </button>
+        </form>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default StudentLogin;
